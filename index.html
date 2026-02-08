@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Byers Room Word Guesser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lacquer&family=Protest+Revolution&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        background-color: #0c0c0c;
+        color: #f3f4f6;
+        overflow: hidden;
+        font-family: 'Crimson Text', serif;
+      }
+      .special-elite {
+        font-family: 'Special Elite', cursive;
+      }
+      @font-face {
+  font-family: "StrangerThingsOutlined";
+  src: url("./assets/Fonts/Stranger\ Things\ Outlined.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BenguiatBold";
+  src: url("./assets/Fonts/Benguiat\ Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+};
+.stranger-things-outlined {
+  font-family: "StrangerThingsOutlined", serif;
+  letter-spacing: 0.3em;
+}
+
+.benguiat-bold {
+  font-family: "BenguiatBold", serif;
+  letter-spacing: 0.2em;
+}
+
+
+      .lacquer-font {
+        font-family: 'Lacquer', system-ui;
+      }
+      /* Apply the Google fonts to wall alphabets */
+      .alphabet-font {
+        font-family: 'Protest Revolution', 'Roboto Mono', sans-serif;
+      }
+      /* Custom glow effects */
+      .light-glow {
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+      }
+      .light-active {
+        filter: brightness(1.5) contrast(1.2);
+      }
+      /* Grain overlay */
+      .grain {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 50;
+        background: url('https://grainy-gradients.vercel.app/noise.svg');
+        opacity: 0.05;
+      }
+      /* Scale-in animation for modal */
+      @keyframes scaleIn {
+        0% {
+          transform: scale(0.7);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <div class="grain"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
