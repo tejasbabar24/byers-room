@@ -1,5 +1,11 @@
 {
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "rewrites": [
+    {
+      "source": "/socket.io(.*)",
+      "destination": "http://localhost:3001/socket.io$1"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
