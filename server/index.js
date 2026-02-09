@@ -1,9 +1,38 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { TECHNICAL_WORDS } from "./constants.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 3001;
-const httpServer = createServer();
+const httpServer = createServer((req, res) => {
+  // Serve static files from dist folder
+  let filePath = path.join(__dirname, "../dist", req.url);
+  
+  if (req.url === "/" || req.url === "") {
+    filePath = path.join(__dirname, "../dist/index.html");
+  } else if (!path.extname(filePath)) {
+    // If no file extension, check if directory, otherwise serve index.html
+    if (!fs.existsSync(filePath)) {
+      filePath = path.join(__dirname, "../dist/index.html");
+    }
+  }
+
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.writeHead(404);
+      res.end("Not Found");
+      return;
+    }
+    res.writeHead(200);
+    res.end(data);
+  });
+});
+
 const io = new Server(httpServer, {
   cors: { origin: "*" },
 });
