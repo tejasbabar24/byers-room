@@ -29,13 +29,27 @@ const App: React.FC = () => {
   const [revealWord, setRevealWord] = useState("");
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const remainingWordsRef = useRef<string[]>([]);
+
 
   const bgUrl = new URL("./assets/BG.png", import.meta.url).toString();
-const getRandomWord = () => {
-  return TECHNICAL_WORDS[
-    Math.floor(Math.random() * TECHNICAL_WORDS.length)
-  ];
-};
+  const getNextWord = () => {
+    const pool = remainingWordsRef.current;
+
+    if (pool.length === 0) {
+      // Safety fallback (should not normally happen)
+      remainingWordsRef.current = [...TECHNICAL_WORDS];
+    }
+
+    const index = Math.floor(Math.random() * pool.length);
+    const word = pool[index];
+
+    // Remove used word
+    pool.splice(index, 1);
+
+    return word;
+  };
+
 
   const startNewGame = async (providedWord?: string) => {
     setIsLoading(true);
@@ -123,35 +137,37 @@ const getRandomWord = () => {
       setShowWelcome(false);
 
       // Start with first word from array
-      const firstWord = getRandomWord();
+      remainingWordsRef.current = [...TECHNICAL_WORDS];
+
+      const firstWord = getNextWord();
 
       setCurrentWord(firstWord);
       currentWordRef.current = firstWord;
       startNewGame(firstWord);
     };
 
-   const onNext = () => {
-  if (!sessionActive || chancesRemaining <= 0) return;
+    const onNext = () => {
+      if (!sessionActive || chancesRemaining <= 0) return;
 
-  const newChancesRemaining = chancesRemaining - 1;
+      const newChancesRemaining = chancesRemaining - 1;
 
-  if (newChancesRemaining <= 0) {
-    setChancesRemaining(0);
-    setSessionCompleted(true);
-    setGameState("FINISHED");
-    socket.emit("game:sessionCompleted", { userName: currentUser });
-    return;
-  }
+      if (newChancesRemaining <= 0) {
+        setChancesRemaining(0);
+        setSessionCompleted(true);
+        setGameState("FINISHED");
+        socket.emit("game:sessionCompleted", { userName: currentUser });
+        return;
+      }
 
-  const nextWord = getRandomWord();
+      const nextWord = getNextWord();
 
-  setWordsShown((prev) => prev + 1);
-  setChancesRemaining(newChancesRemaining);
+      setWordsShown((prev) => prev + 1);
+      setChancesRemaining(newChancesRemaining);
 
-  setCurrentWord(nextWord);
-  currentWordRef.current = nextWord;
-  startNewGame(nextWord);
-};
+      setCurrentWord(nextWord);
+      currentWordRef.current = nextWord;
+      startNewGame(nextWord);
+    };
 
 
     const onRepeat = () => repeatSequence();
